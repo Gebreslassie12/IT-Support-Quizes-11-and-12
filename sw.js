@@ -1,4 +1,4 @@
-const CACHE_NAME = 'it-support-quiz-v2';
+const CACHE_NAME = 'it-support-quiz-v3'; // Changed from v2 to v3
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
