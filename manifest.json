@@ -1,22 +1,22 @@
 {
-  "id": "/",
+  "id": "/IT-Support-Quizes-11-and-12/",
   "name": "IT Support Quizes",
   "short_name": "IT Quizes",
-  "start_url": "./index.html",
-  "scope": "./",
+  "start_url": "/IT-Support-Quizes-11-and-12/index.html",
+  "scope": "/IT-Support-Quizes-11-and-12/",
   "display": "standalone",
   "background_color": "#2c3e50",
   "theme_color": "#3498db",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "./cover.jpg",
+      "src": "/IT-Support-Quizes-11-and-12/cover.jpg",
       "sizes": "192x192",
       "type": "image/jpeg",
       "purpose": "any maskable"
     },
     {
-      "src": "./cover.jpg",
+      "src": "/IT-Support-Quizes-11-and-12/cover.jpg",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any"
