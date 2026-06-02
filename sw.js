@@ -1,8 +1,8 @@
-const CACHE_NAME = 'it-support-quiz-v5';
+const CACHE_NAME = 'it-support-quiz-v9';
 const ASSETS_TO_CACHE = [
   '/IT-Support-Quizes-11-and-12/',
   '/IT-Support-Quizes-11-and-12/index.html',
-  '/IT-Support-Quizes-11-and-12/cover.jpg',
+  '/IT-Support-Quizes-11-and-12/cover.png',
   '/IT-Support-Quizes-11-and-12/manifest.json',
   '/IT-Support-Quizes-11-and-12/sw.js'
 ];
