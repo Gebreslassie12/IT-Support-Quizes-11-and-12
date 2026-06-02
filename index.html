@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Support Quizes - Grades 11 & 12</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3498db">
+    
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #eef2f3;
+            color: var(--dark-text);
+            line-height: 1.4;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .app-header {
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+        }
+
+        .cover-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            border: 2px solid white;
+            margin-bottom: 5px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .app-header h1 {
+            font-size: 1.3rem;
+        }
+
+        /* Scrollable units bar at the top */
+        .units-nav-scroll {
+            background: #1a252f;
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 8px 10px;
+            gap: 8px;
+            scrollbar-width: thin;
+        }
+
+        .nav-unit-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ecf0f1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .content {
+            padding: 15px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* FIXED: Compact 2-column grid layout for mobile devices */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .unit-card {
+            background: var(--light-bg);
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 95px;
+        }
+
+        .unit-card:hover {
+            border-color: var(--secondary-color);
+            background: #f0f7ff;
+        }
+
+        .unit-card h3 {
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+        }
+
+        .unit-card p {
+            font-size: 0.75rem;
+            color: #4b5563;
+            line-height: 1.2;
+        }
+
+        .progress-bar-container {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--secondary-color);
+            height: 100%;
+            width: 0%;
+        }
+
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .options-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 1.5px solid #cbd5e1;
+            padding: 10px 15px;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .option-btn.correct {
+            background: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background: #f8d7da !important;
+            border-color: var(--danger-color) !important;
+            color: #721c24;
+        }
+
+        .btn-action {
+            display: block;
+            width: 100%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-action:disabled {
+            background: #cbd5e1;
+        }
+
+        .result-score-box {
+            text-align: center;
+            padding: 20px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .score-num {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .review-item {
+            padding: 10px;
+            border-left: 4px solid #cbd5e1;
+            background: #fdfdfd;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        
+        .developer-box {
+            margin-top: 20px;
+            background: #f0f7ff;
+            border: 1.5px dashed #3498db;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .telebirr-btn {
+            background: #0066cc;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-top: 5px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="app-header">
+        <img src="cover.jpg" alt="App Cover" class="cover-img" onerror="this.style.display='none';">
+        <h1>IT Support Quizes</h1>
+    </header>
+
+    <nav class="units-nav-scroll">
+        <button class="nav-unit-btn" onclick="startQuiz(1)">Unit 1</button>
+        <button class="nav-unit-btn" onclick="startQuiz(2)">Unit 2</button>
+        <button class="nav-unit-btn" onclick="startQuiz(3)">Unit 3</button>
+        <button class="nav-unit-btn" onclick="startQuiz(4)">Unit 4</button>
+        <button class="nav-unit-btn" onclick="startQuiz(5)">Unit 5</button>
+        <button class="nav-unit-btn" onclick="startQuiz(6)">Unit 6</button>
+    </nav>
+
+    <div class="content">
+        <div id="home-screen" class="screen active">
+            <h2 style="font-size: 1.1rem; margin-bottom: 2px;">Select Your Review Unit</h2>
+            <p style="color: #64748b; font-size: 0.8rem; margin-bottom: 10px;">Pick a module below to launch your 50-question pool.</p>
+            
+            <div class="menu-grid">
+                <button class="unit-card" onclick="startQuiz(1)">
+                    <h3>Unit 1</h3>
+                    <p>Information Systems</p>
+                </button>
+                <button class="unit-card" onclick="startQuiz(2)">
+                    <h3>Unit 2</h3>
+                    <p>Emerging Tech</p>
+                </button>
+                <button class="unit-card" onclick="startQuiz(3)">
+                    <h3>Unit 3</h3>
+                    <p>Hardware Maintenance</p>
+                </button>
+                <button class="unit-card" onclick="startQuiz(4)">
+                    <h3>Unit 4</h3>
+                    <p>OS Administration</p>
+                </button>
+                <button class="unit-card" onclick="startQuiz(5)">
+                    <h3>Unit 5</h3>
+                    <p>Network Config</p>
+                </button>
+                <button class="unit-card" onclick="startQuiz(6)">
+                    <h3>Unit 6</h3>
+                    <p>IT Helpdesk Ops</p>
+                </button>
+            </div>
+
+            <div class="developer-box">
+                <h4 style="color: #2c3e50; font-size: 0.9rem;">💖 Encourage Developer</h4>
+                <p style="font-size: 0.75rem; color: #4b5563;">Support this offline work via Telebirr!</p>
+                <p style="font-weight: bold; font-size: 0.85rem; color: #0066cc; margin-top: 2px;">0946911419</p>
+                <div class="telebirr-btn">Dial: *806*0946911419*10#</div>
+            </div>
+        </div>
+
+        <div id="quiz-screen" class="screen">
+            <div class="progress-bar-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            <div class="quiz-meta">
+                <span id="current-unit-title">Unit Pool</span>
+                <span id="question-counter">Question 1 of 50</span>
+            </div>
+            <div id="question-text" class="question-text">Loading question assets...</div>
+            <div id="options-container" class="options-list"></div>
+            <button id="next-btn" class="btn-action" onclick="nextQuestion()" disabled>Next Question</button>
+        </div>
+
+        <div id="result-screen" class="screen">
+            <div class="result-score-box">
+                <h2 style="font-size: 1.2rem;">Evaluation Summary</h2>
+                <div id="score-display" class="score-num">0 / 50</div>
+                <div id="percentage-display" style="font-weight: bold; font-size: 1rem; margin-bottom: 5px;">0%</div>
+                <div id="feedback-message" style="font-size: 1rem; font-weight: bold;">Processing...</div>
+            </div>
+
+            <button class="btn-action" onclick="backToHome()" style="margin-bottom: 20px; background-color: var(--secondary-color);">Return to Dashboard</button>
+
+            <div class="review-section">
+                <h3 style="font-size: 1rem; margin-bottom: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 3px;">Answers Key Review List</h3>
+                <div id="review-container"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const baseTemplates = [
+        { q: "Which item deals directly with data processing transparency ethics?", a: ["System logging layers", "Hardware bus speeds", "Display matrix ratios", "Processor pin arrays"], c: 0 },
+        { q: "What tool mitigates system failures due to local storage drive crashes?", a: ["Disabling interface protocols", "Redundant local configuration backups", "Clearing physical RAM arrays", "Increasing system screen resolution"], c: 1 },
+        { q: "Which structural issue represents the primary constraint of high data asset ingestion?", a: ["Storage cluster degradation", "Unstructured throughput velocity congestion", "Localized thermal production spikes", "Manual variable interface setups"], c: 2 },
+        { q: "What protocol infrastructure guarantees data delivery authentication across network segments?", a: ["Bus architecture layouts", "Physical display interfaces", "Static system storage paths", "Cryptographic cryptographic tokens"], c: 3 },
+        { q: "Which variable regulates information transmission speeds within high-density clusters?", a: ["Available interface network bandwidth allocations", "Static disk interface speeds", "System interface terminal settings", "External peripheral attachment variants"], c: 0 },
+        { q: "What operational challenge is most prominent during manual resource deployment operations?", a: ["High processing calculation overhead", "Human infrastructure management mistakes", "Physical configuration drive errors", "Saturated interface transfer states"], c: 1 }
+    ];
+
+    const quizDatabase = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] };
+
+    function buildCompleteDatabase() {
+        for(let u = 1; u <= 6; u++) {
+            for(let qCount = 1; qCount <= 50; qCount++) {
+                let template = baseTemplates[(qCount + u) % baseTemplates.length];
+                let rotatedCorrectIdx = (qCount + u) % 4;
+                let originalCorrectOptionText = template.a[template.c];
+                let modifiedOptions = [...template.a];
+                
+                let tempVal = modifiedOptions[rotatedCorrectIdx];
+                modifiedOptions[rotatedCorrectIdx] = originalCorrectOptionText;
+                modifiedOptions[template.c] = tempVal;
+
+                quizDatabase[u].push({
+                    q: `[Unit ${u} - Q${qCount}] Evaluate standard infrastructure configuration: ${template.q}`,
+                    a: modifiedOptions,
+                    c: rotatedCorrectIdx
+                });
+            }
+        }
+    }
+    buildCompleteDatabase();
+
+    let currentUnit = 1;
+    let currentQuestionIdx = 0;
+    let score = 0;
+    let userSelections = [];
+
+    function startQuiz(unitNumber) {
+        currentUnit = unitNumber;
+        currentQuestionIdx = 0;
+        score = 0;
+        userSelections = [];
+        
+        document.getElementById('current-unit-title').innerText = `Unit ${unitNumber} Pool`;
+        switchScreen('quiz-screen');
+        renderQuestion();
+    }
+
+    function renderQuestion() {
+        const currentQuestion = quizDatabase[currentUnit][currentQuestionIdx];
+        
+        document.getElementById('question-counter').innerText = `Question ${currentQuestionIdx + 1} of 50`;
+        document.getElementById('progress-bar').style.width = `${(currentQuestionIdx / 50) * 100}%`;
+        document.getElementById('question-text').innerText = currentQuestion.q;
+        
+        const optionsContainer = document.getElementById('options-container');
+        optionsContainer.innerHTML = '';
+        document.getElementById('next-btn').disabled = true;
+
+        const labels = ["A", "B", "C", "D"];
+        currentQuestion.a.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.innerText = `${labels[index]}. ${option}`;
+            button.onclick = () => selectOption(index);
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function selectOption(selectedIndex) {
+        const currentQuestion = quizDatabase[currentUnit][currentQuestionIdx];
+        const buttons = document.getElementById('options-container').getElementsByClassName('option-btn');
+        const correctIndex = currentQuestion.c;
+        const isCorrect = (selectedIndex === correctIndex);
+
+        if(isCorrect) score++;
+
+        userSelections.push({
+            question: currentQuestion.q,
+            options: currentQuestion.a,
+            userChoice: selectedIndex,
+            correctChoice: correctIndex,
+            isCorrect: isCorrect
+        });
+
+        for (let i = 0; i < buttons.length; i++) {
+            buttons[i].disabled = true;
+            if (i === correctIndex) {
+                buttons[i].classList.add('correct');
+            } else if (i === selectedIndex && !isCorrect) {
+                buttons[i].classList.add('wrong');
+            }
+        }
+        document.getElementById('next-btn').disabled = false;
+    }
+
+    function nextQuestion() {
+        currentQuestionIdx++;
+        if (currentQuestionIdx < 50) {
+            renderQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        document.getElementById('progress-bar').style.width = '100%';
+        switchScreen('result-screen');
+        
+        document.getElementById('score-display').innerText = `${score} / 50`;
+        const percent = Math.round((score / 50) * 100);
+        document.getElementById('percentage-display').innerText = `${percent}%`;
+
+        let message = "";
+        let color = "";
+        if (percent > 70) { message = "🏆 Excellent command!"; color = "var(--success-color)"; }
+        else if (percent >= 50) { message = "👍 Good foundation Baseline."; color = "var(--warning-color)"; }
+        else { message = "📚 Review core resource modules."; color = "var(--danger-color)"; }
+        
+        const feedbackEl = document.getElementById('feedback-message');
+        feedbackEl.innerText = message;
+        feedbackEl.style.color = color;
+
+        const reviewContainer = document.getElementById('review-container');
+        reviewContainer.innerHTML = '';
+        const labels = ["A", "B", "C", "D"];
+
+        userSelections.forEach((item, index) => {
+            const reviewDiv = document.createElement('div');
+            reviewDiv.className = `review-item ${item.isCorrect ? 'correct-review' : 'wrong-review'}`;
+            reviewDiv.innerHTML = `
+                <p><strong>Q${index + 1}: ${item.question}</strong></p>
+                <p style="margin-top: 3px;">
+                    Your choice: <span style="color:${item.isCorrect ? 'green':'red'}">${labels[item.userChoice]}. ${item.options[item.userChoice]}</span> | 
+                    Correct: <span style="color:green; font-weight:bold;">${labels[item.correctChoice]}. ${item.options[item.correctChoice]}</span>
+                </p>
+            `;
+            reviewContainer.appendChild(reviewDiv);
+        });
+    }
+
+    function switchScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function backToHome() { switchScreen('home-screen'); }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js').catch(err => console.log(err));
+        });
+    }
+</script>
+
+</body>
+</html>
