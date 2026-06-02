@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT Support Quizes - Grades 11 & 12</title>
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/IT-Support-Quizes-11-and-12/manifest.json">
     <meta name="theme-color" content="#3498db">
     
     <style>
@@ -63,7 +63,6 @@
             font-size: 1.3rem;
         }
 
-        /* Scrollable units bar at the top */
         .units-nav-scroll {
             background: #1a252f;
             display: flex;
@@ -97,7 +96,6 @@
             display: block;
         }
 
-        /* FIXED: Compact 2-column grid layout for mobile devices */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -261,7 +259,7 @@
 
 <div class="container">
     <header class="app-header">
-        <img src="cover.jpg" alt="App Cover" class="cover-img" onerror="this.style.display='none';">
+        <img src="/IT-Support-Quizes-11-and-12/cover.png" alt="App Cover" class="cover-img" onerror="this.style.display='none';">
         <h1>IT Support Quizes</h1>
     </header>
 
@@ -497,11 +495,11 @@
     function backToHome() { switchScreen('home-screen'); }
 
     if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/IT-Support-Quizes-11-and-12/sw.js')
-            .then(reg => console.log('Service Worker Registered Setup Core'))
-            .catch(err => console.log('Service Worker Error:', err));
-    });
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/IT-Support-Quizes-11-and-12/sw.js')
+                .then(reg => console.log('Service Worker Active'))
+                .catch(err => console.log('Worker Error:', err));
+        });
     }
 </script>
 
