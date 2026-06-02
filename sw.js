@@ -1,10 +1,10 @@
-const CACHE_NAME = 'it-support-quiz-v3'; // Changed from v2 to v3
+const CACHE_NAME = 'it-support-quiz-v5';
 const ASSETS_TO_CACHE = [
-  './',
-  './index.html',
-  './cover.jpg',
-  './manifest.json',
-  './sw.js'
+  '/IT-Support-Quizes-11-and-12/',
+  '/IT-Support-Quizes-11-and-12/index.html',
+  '/IT-Support-Quizes-11-and-12/cover.jpg',
+  '/IT-Support-Quizes-11-and-12/manifest.json',
+  '/IT-Support-Quizes-11-and-12/sw.js'
 ];
 
 self.addEventListener('install', (event) => {
@@ -32,11 +32,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request);
+      return cachedResponse || fetch(event.request);
     })
   );
 });
-
